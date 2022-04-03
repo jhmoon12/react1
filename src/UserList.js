@@ -1,6 +1,6 @@
 import React,{ useEffect } from 'react';
 
-function User({user, onRemove, onToggle}){
+const User = React.memo(function User({user, onRemove, onToggle}){
     const { username, email, id, active }= user;//구조분해할당
     /* useEffect(()=>{
         console.log('유저값이 설정됨');
@@ -26,7 +26,7 @@ function User({user, onRemove, onToggle}){
         </div>
     )
        
-}
+})
 
 function UserList({users, onRemove, onToggle})  {
     
@@ -48,4 +48,4 @@ function UserList({users, onRemove, onToggle})  {
     );
 };
 
-export default UserList;
+export default React.memo(UserList);
