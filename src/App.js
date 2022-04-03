@@ -1,7 +1,13 @@
-import React,{ useRef, useState } from 'react';
+import React,{ useRef, useState, useMemo, useCallback } from 'react';
 import './App.css';
 import CreateUser from './CreateUser';
 import UserList from './UserList';
+
+
+function countActiveUsers(users) {
+  console.log('활성된 사용자 수를 세는 중');
+  return users.filter(users => users.active).length;
+}
 
 function App() {
 
@@ -11,13 +17,13 @@ function App() {
   });
   const { username, email } = inputs; //구조분해할당
 
-  const onChange = (e) => {
+  const onChange = useCallback((e) => {
     const { name, value } = e.target;
     setInputs({
       ...inputs,
       [name] : value
     });
-  };
+  },[inputs]);
   //onChange 함수
 
   const [users,setUsers] = useState([{
@@ -42,7 +48,7 @@ function App() {
 
 const nextId = useRef(4);//컴포넌트가 리 렌더링 될 필요 없기 때문에 ref 로 관리해주는 것
 
-const onCreate = () => {
+const onCreate = useCallback(() => {
   const user = {
     id: nextId.current,
     username,
@@ -56,18 +62,18 @@ const onCreate = () => {
   //초기화
   
   nextId.current += 1; //기존 값에 1을 더해주는 작업
-}
-const onRemove = id => {
+},[username, email, users ])
+const onRemove = useCallback( id => {
   setUsers(users.filter( user => user.id !== id)); //user.id !== id 가 true 일때 나머지 배열만 새 배열로 만듦
-};
-const onToggle = id => {
+},[users]);
+const onToggle = useCallback( id => {
   setUsers(users.map(
     user => user.id === id ? 
     {...user, active: !user.active }
     : user
   ));
-};
-
+}, [users]);
+const count = useMemo(()=>countActiveUsers(users), [users]);
   return (
     <div>
       <CreateUser 
@@ -81,6 +87,7 @@ const onToggle = id => {
       onRemove={onRemove}
       onToggle={onToggle}
       />
+      <div>활성 사용자 수 : {count}</div>
     </div>
   );
 }
