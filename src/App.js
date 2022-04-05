@@ -39,24 +39,20 @@ function reducer(state, action){
     
     case 'CREATE_USER': {
       return {
-        inputs: initialState.inputs, //초기값
+        
         users: state.users.concat(action.user) //배열 추가
       }
     };// useState를 썼을 때는 기존 작업 두가지를 따로 했는데, 이곳에서는 한 번에 할 수 있다.
     case 'TOGGLE_USER': {
       return {
-        ...state,
-        users: state.users.map(user => 
-          user.id === action.id
-          ? {...user, active: !user.active }
-          : user
+        users: state.users.map(user =>
+          user.id === action.id ? { ...user, active: !user.active } : user
         )
       }
     };
     case 'REMOVE_USER': {
       return {
-        ...state,
-        users: state.users.filter( user => user.id !== action.id)
+        users: state.users.filter(user => user.id !== action.id)
       }
     };
     default : 
@@ -68,7 +64,7 @@ function reducer(state, action){
 function App() {
 
   const [ state, dispatch ] = useReducer(reducer, initialState);
-  const [ form, onChange, reset ] = useInputs({
+  const [ {username, email }, onChange, reset ] = useInputs({
     username : '',
     email: '',
   })
