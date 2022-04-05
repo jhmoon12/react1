@@ -1,6 +1,9 @@
 import React, { createContext, useContext } from 'react';
 
-function Child ( {text }) {
+const MyContext = createContext('defaultvalue')
+;
+function Child () {
+    const text = useContext(MyContext);
     return (
         <div>
             안녕하세요? {text}
@@ -8,16 +11,21 @@ function Child ( {text }) {
     );
 };
 
-function Parent ({ text }) {
-    return <Child text={text} />
+function Parent () {
+    return <Child />
 } 
 
-function GrandParent({ text }) {
-    return <Parent text={text} />
+function GrandParent() {
+    return <Parent />
 }
 
 function ContextSample () {
-    return <GrandParent text="Good"/>
+    return (
+    <MyContext.Provider value="Good">
+        <GrandParent text="Good"/>
+    </MyContext.Provider>
+    )
+        
 }
 
 export default ContextSample;
